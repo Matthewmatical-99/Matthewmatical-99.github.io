@@ -5,18 +5,15 @@ import './App.css';
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
+      <header className="App-header" style={{ backgroundImage: 'url(https://imgur.com/kgbYeVO.jpg)' }}>
+        <p>Feh to you, good sir!</p>
         <a
           className="App-link"
-          href="https://reactjs.org"
+          href="https://github.com/Matthewmatical-99"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React
+          My GitHub page
         </a>
       </header>
     </div>
