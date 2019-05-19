@@ -1,12 +1,12 @@
 import React from 'react';
-import logo from './logo.svg';
+import Sanik from './components/sanik';
 import './App.css';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header" style={{ backgroundImage: 'url(https://imgur.com/kgbYeVO.jpg)' }}>
-        <p>Feh to you, good sir!</p>
+        <p>More content coming soon. Please come back tomorrow.</p>
         <a
           className="App-link"
           href="https://github.com/Matthewmatical-99"
@@ -15,6 +15,7 @@ function App() {
         >
           My GitHub page
         </a>
+        <Sanik size={200} />
       </header>
     </div>
   );
