@@ -15,7 +15,7 @@ function App() {
         >
           My GitHub page
         </a>
-        <Sanik size={200} />
+        <Sanik />
       </header>
     </div>
   );
