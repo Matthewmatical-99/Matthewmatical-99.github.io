@@ -1,24 +1,24 @@
 import React from 'react';
-import Sanik from './components/sanik';
-import './App.css';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header" style={{ backgroundImage: 'url(https://imgur.com/kgbYeVO.jpg)' }}>
-        <p>More content coming soon. Please come back tomorrow.</p>
-        <a
-          className="App-link"
-          href="https://github.com/Matthewmatical-99"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          My GitHub page
-        </a>
-        <Sanik />
-      </header>
+import Homepage from './containers/Homepage';
+
+const testPage = () => (
+  <div>
+    <p>
+      This is on a different page. Neato.
+    </p>
+    <Link to="/">Back to Homepage</Link>
+  </div>
+);
+
+const App = () => (
+  <Router>
+    <div>
+      <Route path="/" exact component={Homepage} />
+      <Route path="/elsewhere/" component={testPage} />
     </div>
-  );
-}
+  </Router>
+);
 
 export default App;
