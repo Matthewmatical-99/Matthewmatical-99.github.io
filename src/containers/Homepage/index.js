@@ -1,16 +1,15 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+// eslint-disable-next-line no-unused-vars
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
-import Sanik from '../../components/sanik';
+import Sanik from '../../components/Sanik';
+import pageRoutes from '../../constants/page-routes';
 
 import './index.css';
 
 function Homepage() {
   return (
-    <div className="App">
-      <header className="App-header" style={{ backgroundImage: 'url(https://imgur.com/kgbYeVO.jpg)' }}>
-        <h1 className="page-title">Matthew Phillips' Website of Memes</h1>
-      </header>
+    <div>
       <div className="content-body">
         <p>This is the official website of Matthew Phillips. Thank you for visiting.</p>
         <p>Since I've just started working on this, there isn't much here.</p>
@@ -23,7 +22,6 @@ function Homepage() {
         >
           My GitHub page
         </a>
-        <Link to="/elsewhere/">Router test</Link>
       </div>
       <Sanik />
     </div>
