@@ -3,14 +3,63 @@ import React from 'react';
 import makeMaze from './maze-generation-utils';
 import * as Styled from './styles';
 
+const CHUNK_SIZE = 8;
+
+const takeChunk = (grid, x, y) => {
+  const chunk = Array(CHUNK_SIZE).fill(null);
+  chunk.forEach((row, index) => {
+    if (CHUNK_SIZE * y + index >= grid.length) return chunk.filter(line => line);
+    chunk[index] = grid[CHUNK_SIZE * y + index].slice(CHUNK_SIZE * x, CHUNK_SIZE * (x + 1));
+  });
+  return chunk.filter(line => line);
+};
+
+class MazeChunk extends React.Component {
+  shouldComponentUpdate(newProps) {
+    const { chunk, x, y, chunkX, chunkY } = this.props;
+    return (
+      chunk !== newProps.chunk || // if a new maze was generated
+      Math.floor(x / CHUNK_SIZE) === chunkX && Math.floor(y / CHUNK_SIZE) === chunkY || // if the cursor was in this chunk
+      Math.floor(newProps.x / CHUNK_SIZE) === chunkX && Math.floor(newProps.y / CHUNK_SIZE) === chunkY // if the cursor will be in this chunk
+    );
+  }
+
+  render() {
+    console.log('rendered a chunk');
+    const { chunk, chunkX, chunkY, x, y, cursorColour } = this.props;
+    const cursorIsHereSomewhere = Math.floor(x / CHUNK_SIZE) === chunkX && Math.floor(y / CHUNK_SIZE) === chunkY;
+    return (
+      <Styled.Chunk>
+        {chunk.map((row, rowNum) => (
+          <Styled.Row>
+            {row.map((cell, colNum) => (
+              <Styled.Cell hall={cell} style={(cursorIsHereSomewhere && colNum === x % CHUNK_SIZE && rowNum === y % CHUNK_SIZE) ? { backgroundColor: cursorColour } : {}} /> 
+            ))}
+          </Styled.Row>
+        ))}
+      </Styled.Chunk>
+    );
+  }
+}
+
 const Maze = ({ grid, restartHandler }) => {
   const [xPos, setX] = React.useState(1);
   const [yPos, setY] = React.useState(1);
+  const [chunkGrid, setChunkGrid] = React.useState([]);
+
   const won = xPos === grid[0].length - 2 && yPos === grid.length - 1;
   const cursorColour = won ? 'green' : 'red';
   React.useEffect(() => {
     setX(1);
     setY(1);
+    const chunkW = Math.ceil(grid[0].length / CHUNK_SIZE);
+    const chunkH = Math.ceil(grid.length / CHUNK_SIZE);
+    const newChunkGrid = Array(chunkH).fill(null);
+    newChunkGrid.forEach((row, i) => {
+      newChunkGrid[i] = [];
+      for (let j = 0; j < chunkW; j++) newChunkGrid[i].push(takeChunk(grid, j, i));
+    });
+    setChunkGrid(newChunkGrid);
   }, [grid]);
 
   const moveHandler = (event) => {
@@ -41,10 +90,17 @@ const Maze = ({ grid, restartHandler }) => {
   return (grid || null) && (
     <Styled.MazeWrapper mazeWidth={grid[0].length}>
       <Styled.Grid tabIndex={0} onKeyPress={moveHandler}>
-        {grid.map((row, rowNum) => (
+        {chunkGrid.map((chunkRow, rowNum) => (
           <Styled.Row>
-            {row.map((cell, colNum) => (
-              <Styled.Cell hall={cell} style={(colNum === xPos && rowNum === yPos) ? { backgroundColor: cursorColour } : {}} /> 
+            {chunkRow.map((chunk, colNum) => (
+              <MazeChunk
+                cursorColour={cursorColour}
+                chunkX={colNum}
+                chunkY={rowNum}
+                x={xPos}
+                y={yPos}
+                chunk={chunk}
+              /> 
             ))}
           </Styled.Row>
         ))}

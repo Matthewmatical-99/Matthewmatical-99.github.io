@@ -14,6 +14,11 @@ export const Row = styled.div`
   flex-direction: row;
 `;
 
+export const Chunk = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 export const Grid = styled.div`
   display: flex;
   flex-direction: column;

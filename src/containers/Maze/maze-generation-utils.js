@@ -66,21 +66,23 @@ function isSolvable(maze) {
 }
 
 function niceify(maze) {
-  for (let i = 2; i < maze.length - 2; i += 2) {
-    for (let j = 2; j < maze[0].length - 1; j++) {
+  const lCol = maze[0].length - 2;
+  const lRow = maze.length - 2;
+  for (let i = 2; i < lRow; i += 2) {
+    for (let j = 2; j <= lCol; j++) {
       if (maze[i-1][j-1] && maze[i][j-1] && maze[i+1][j-1]) {
-        while (maze[i-1][j] && maze[i+1][j]) {
-          maze[i][j] = false;
-          j++;
+        let k = j;
+        while (maze[i-1][k] && maze[i+1][k]) {
+          maze[i][k] = false;
+          k++;
         }
       }
-    }
-    for (let j = 1; j < maze[0].length - 1; j++) {
       if (!maze[i-1][j] && !maze[i+1][j] && !maze[i][j-1] && !maze[i][j+1]) maze[i][j] = false;
-      i--;
-      if (!maze[i-1][j] && !maze[i+1][j] && !maze[i][j-1] && !maze[i][j+1]) maze[i][j] = false;
-      i++;
+      if (!maze[i-2][j] && !maze[i][j] && !maze[i-1][j-1] && !maze[i-1][j+1]) maze[i-1][j] = false;
     }
+  }
+  for (let j = 1; j <= lCol; j++) {
+    if (!maze[lRow-1][j] && !maze[lRow+1][j] && !maze[lRow][j-1] && !maze[lRow][j+1]) maze[lRow][j] = false;
   }
   return maze;
 }
