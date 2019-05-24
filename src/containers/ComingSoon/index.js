@@ -6,7 +6,7 @@ import pageRoutes from '../../constants/page-routes';
 
 const ComingSoon = () => (
   <div>
-    <p style={{ color: 'white' }}>This page is coming soon.</p>
+    <p style={{ color: 'white' }}>This page is coming soon. Don't hold your breath.</p>
     <Link to={pageRoutes.HOMEPAGE} style={{ color: '#61dafb' }}>Back to homepage</Link>
   </div>
 );

@@ -12,6 +12,7 @@ function Homepage() {
     <div>
       <div className="content-body">
         <p>This is the official website of Matthew Phillips. Thank you for visiting.</p>
+        <p>I made this website to show off my l33t c0d1ng ski11z.</p>
         <p>Since I've just started working on this, there isn't much here.</p>
         <p>More content (and maybe even some professionalism) coming soon. Please check again tomorrow.</p>
         <a

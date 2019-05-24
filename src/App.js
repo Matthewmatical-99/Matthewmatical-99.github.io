@@ -5,6 +5,7 @@ import pageRoutes from './constants/page-routes';
 
 import Homepage from './containers/Homepage';
 import ComingSoon from './containers/ComingSoon';
+import Games from './containers/Games';
 import NavBar from './components/NavBar';
 
 import './App.css';
@@ -18,7 +19,7 @@ const App = () => (
       <NavBar />
       <Route path={pageRoutes.HOMEPAGE} exact component={Homepage} />
       <Route path={pageRoutes.ABOUT_ME} component={ComingSoon} />
-      <Route path={pageRoutes.GAMES} component={ComingSoon} />
+      <Route path={pageRoutes.GAMES} component={Games} />
       <Route path={pageRoutes.MEMES} component={ComingSoon} />
     </div>
   </Router>
