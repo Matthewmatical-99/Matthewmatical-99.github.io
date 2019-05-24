@@ -25,7 +25,6 @@ class MazeChunk extends React.Component {
   }
 
   render() {
-    console.log('rendered a chunk');
     const { chunk, chunkX, chunkY, x, y, cursorColour } = this.props;
     const cursorIsHereSomewhere = Math.floor(x / CHUNK_SIZE) === chunkX && Math.floor(y / CHUNK_SIZE) === chunkY;
     return (

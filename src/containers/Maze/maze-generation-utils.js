@@ -58,10 +58,6 @@ function isSolvable(maze) {
     facing %= 4;
     stepsFailsafe--;
   }
-  if (!stepsFailsafe) {
-    console.log('bruh');
-    return true;
-  }
   return false;
 }
 
@@ -89,8 +85,6 @@ function niceify(maze) {
 
 export default function makeGoodMaze(width, hallCount) {
   let maze = makeNew(width, hallCount);
-  let count = 0;
-  for (maze; !isSolvable(maze); maze = makeNew(width, hallCount)) count++;
-  console.log(`Checked ${count} mazes before finding a solvable one.`);
+  for (maze; !isSolvable(maze); maze = makeNew(width, hallCount)) {}
   return niceify(maze);
 }
