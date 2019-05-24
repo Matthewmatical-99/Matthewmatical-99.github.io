@@ -41,7 +41,7 @@ class MazeChunk extends React.Component {
   }
 }
 
-const Maze = ({ grid, restartHandler }) => {
+const Maze = ({ grid, restartHandler, finishRestarting }) => {
   const [xPos, setX] = React.useState(1);
   const [yPos, setY] = React.useState(1);
   const [chunkGrid, setChunkGrid] = React.useState([]);
@@ -59,6 +59,7 @@ const Maze = ({ grid, restartHandler }) => {
       for (let j = 0; j < chunkW; j++) newChunkGrid[i].push(takeChunk(grid, j, i));
     });
     setChunkGrid(newChunkGrid);
+    finishRestarting();
   }, [grid]);
 
   const moveHandler = (event) => {
@@ -110,17 +111,22 @@ const Maze = ({ grid, restartHandler }) => {
 
 const MazeWrapper = ({ width, halfHeight }) => {
   const [grid, changeGrid] = React.useState(makeMaze(width, halfHeight));
+  const [restarting, setRestarting] = React.useState(false);
+  const finishedRestarting = () => setRestarting(false);
   const restartHandler = (event) => {
     switch (event.key) {
       case 'r':
       case 'R':
-        changeGrid(makeMaze(width, halfHeight));
+        if (!restarting) {
+          setRestarting(true);
+          changeGrid(makeMaze(width, halfHeight));
+        }
         break;
       default:
         break;
     }
   };
-  return <Maze grid={grid} restartHandler={restartHandler} />
+  return <Maze grid={grid} restartHandler={restartHandler} finishRestarting={finishedRestarting} />
 };
 
 export default MazeWrapper;
