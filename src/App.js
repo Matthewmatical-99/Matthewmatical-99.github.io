@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'; // eslint-disable-next-line no-unused-vars
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
 import pageRoutes from './constants/page-routes';

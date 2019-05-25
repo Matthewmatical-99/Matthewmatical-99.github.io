@@ -24,21 +24,6 @@ function makeNew(width, hallCount) {
   return maze;
 }
 
-function compass(bearing) {
-  switch (bearing) {
-    case 0:
-      return 'north';
-    case 1:
-      return 'west';
-    case 2:
-      return 'south';
-    case 3:
-      return 'east';
-    default:
-      return 'into the void';
-  }
-}
-
 function isSolvable(maze) {
   let startVisits = 0;
   let stepsFailsafe = maze[0].length * maze.length * 4;

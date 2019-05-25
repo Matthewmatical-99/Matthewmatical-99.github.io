@@ -1,9 +1,6 @@
 import React from 'react';
-// eslint-disable-next-line no-unused-vars
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
 import Sanik from '../../components/Sanik';
-import pageRoutes from '../../constants/page-routes';
 
 import './index.css';
 
