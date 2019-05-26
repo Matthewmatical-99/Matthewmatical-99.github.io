@@ -1,6 +1,6 @@
 import React from 'react';
-import Maze from '../Maze';
 
+import Maze from '../Maze';
 import * as Styled from './styles';
 
 const Games = () => (
@@ -13,7 +13,7 @@ const Games = () => (
       <p>Alternatively, tap/click any directly connected (same row/column) location to move there.</p>
     </div>
     <Styled.GameWrapper>
-      <Maze width={101} halfHeight={50}/>
+      <Maze />
     </Styled.GameWrapper>
   </div>
 );

@@ -1,5 +1,4 @@
-function makeNew(width, hallCount) {
-  const height = (hallCount * 2) + 1;
+function makeNew(width, height) {
   const maze = Array(height).fill('placeholder');
   maze.forEach((row, yPos) => {
     maze[yPos] = new Array(width).fill(true);
@@ -50,7 +49,7 @@ function niceify(maze) {
   const lCol = maze[0].length - 2;
   const lRow = maze.length - 2;
   for (let i = 2; i < lRow; i += 2) {
-    for (let j = 2; j <= lCol; j++) {
+    for (let j = 1; j <= lCol; j++) {
       if (maze[i-1][j-1] && maze[i][j-1] && maze[i+1][j-1]) {
         let k = j;
         while (maze[i-1][k] && maze[i+1][k]) {
@@ -68,8 +67,8 @@ function niceify(maze) {
   return maze;
 }
 
-export default function makeGoodMaze(width, hallCount) {
-  let maze = makeNew(width, hallCount);
-  for (maze; !isSolvable(maze); maze = makeNew(width, hallCount)) {}
+export default function makeGoodMaze(width, height) {
+  let maze = makeNew(width, height);
+  for (maze; !isSolvable(maze); maze = makeNew(width, height)) {}
   return niceify(maze);
 }

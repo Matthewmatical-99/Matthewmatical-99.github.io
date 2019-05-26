@@ -34,3 +34,16 @@ export const MazeWrapper = styled.div`
   display: flex;
   justify-content: center;
 `;
+
+export const MazeConfig = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const ConfigSlider = styled.div`
+  width: 100px;
+  margin: 10px;
+`;

@@ -1,5 +1,8 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
+import { mazeConfig } from '../../actions';
+import Input from './input';
 import makeMaze from './maze-generation-utils';
 import * as Styled from './styles';
 
@@ -18,12 +21,12 @@ class MazeChunk extends React.Component {
   shouldComponentUpdate(newProps) {
     const { chunk, x, y, chunkX, chunkY } = this.props;
     const { minX, minY, maxX, maxY } = newProps.limits;
-    return ( /* eslint-disable no-mixed-operators */
-      chunk !== newProps.chunk || // if a new maze was generated
-      minX <= chunkX && maxX >= chunkX && minY <= chunkY && maxY >= chunkY ||
-      Math.floor(x / CHUNK_SIZE) === chunkX && Math.floor(y / CHUNK_SIZE) === chunkY || // if the cursor was in this chunk
-      Math.floor(newProps.x / CHUNK_SIZE) === chunkX && Math.floor(newProps.y / CHUNK_SIZE) === chunkY // if the cursor will be in this chunk
-    );
+    /* eslint-disable no-mixed-operators */
+    return (chunk !== newProps.chunk || // if a new maze was generated
+      (newProps.x !== x || newProps.y !== y) && (
+        Math.floor(newProps.x / CHUNK_SIZE) === chunkX && minY <= chunkY && maxY >= chunkY ||
+        Math.floor(newProps.y / CHUNK_SIZE) === chunkY && minX <= chunkX && maxX >= chunkX
+    ));
   }
 
   render() {
@@ -107,6 +110,8 @@ const Maze = ({ grid, restartHandler, finishRestarting }) => {
       setPos({ x: clickX, y: pos.y });
     }
   });
+
+  // These are used to determine which chunks could be entered during the next move, so they will re-render as needed.
   let [minX, minY, maxX, maxY] = [pos.x, pos.y, pos.x, pos.y];
   for (maxY = pos.y; maxY < grid.length - 1 && grid[maxY + 1][pos.x]; maxY++) {}
   for (maxX = pos.x; grid[pos.y][maxX + 1]; maxX++) {}
@@ -119,35 +124,42 @@ const Maze = ({ grid, restartHandler, finishRestarting }) => {
   const limits = { minX, minY, maxX, maxY };
 
   return (grid || null) && (
-    <div>
-      <div className="content-body">
-        <button onClick={() => restartHandler({ key: 'r' })}>Restart</button>
-      </div>
-      <Styled.MazeWrapper mazeWidth={grid[0].length}>
-        <Styled.Grid tabIndex={0} onKeyPress={moveHandler}>
-          {chunkGrid.map((chunkRow, rowNum) => (
-            <Styled.Row>
-              {chunkRow.map((chunk, colNum) => (
-                <MazeChunk
-                  cursorColour={cursorColour}
-                  chunkX={colNum}
-                  chunkY={rowNum}
-                  {...pos} // x and y
-                  chunk={chunk}
-                  makeHandler={clickMover}
-                  limits={limits}
-                />
-              ))}
-            </Styled.Row>
-          ))}
-        </Styled.Grid>
-      </Styled.MazeWrapper>
-    </div>
+    <Styled.MazeWrapper mazeWidth={grid[0].length}>
+      <Styled.Grid tabIndex={0} onKeyPress={moveHandler}>
+        {chunkGrid.map((chunkRow, rowNum) => (
+          <Styled.Row>
+            {chunkRow.map((chunk, colNum) => (
+              <MazeChunk
+                cursorColour={cursorColour}
+                chunkX={colNum}
+                chunkY={rowNum}
+                {...pos} // x and y
+                chunk={chunk}
+                makeHandler={clickMover}
+                limits={limits}
+              />
+            ))}
+          </Styled.Row>
+        ))}
+      </Styled.Grid>
+    </Styled.MazeWrapper>
   );
 };
 
-const MazeWrapper = ({ width, halfHeight }) => {
-  const [grid, changeGrid] = React.useState(makeMaze(width, halfHeight));
+const mapStateToProps = state => ({
+  ...state.maze,
+});
+
+const mapDispatchToProps = dispatch => ({
+  changeWidth: width => dispatch(mazeConfig({ width })),
+  changeHeight: height => dispatch(mazeConfig({ height: height - 1 })),
+});
+
+const MazeWrapper = ({ width, height, changeWidth, changeHeight }) => {
+  const [grid, changeGrid] = React.useState([]);
+  if (!grid.length) { // So it doesn't call makeMaze on every render
+    changeGrid(makeMaze(width, height));
+  }
   const [restarting, setRestarting] = React.useState(false);
   const finishedRestarting = () => setRestarting(false);
   const restartHandler = (event) => {
@@ -156,14 +168,33 @@ const MazeWrapper = ({ width, halfHeight }) => {
       case 'R':
         if (!restarting) {
           setRestarting(true);
-          changeGrid(makeMaze(width, halfHeight));
+          changeGrid(makeMaze(width, height));
         }
         break;
       default:
         break;
     }
   };
-  return <Maze grid={grid} restartHandler={restartHandler} finishRestarting={finishedRestarting} />
+  return (
+    <div>
+      <div className="content-body">
+        <Styled.MazeConfig>
+          <button onClick={() => restartHandler({ key: 'r' })}>Restart</button>
+          <p>Maze Settings:</p>
+          <Styled.ConfigSlider><Input value={width} handler={changeWidth} name="Maze Width" /></Styled.ConfigSlider>
+          <Styled.ConfigSlider><Input value={height} handler={changeHeight} name="Maze Height" height /></Styled.ConfigSlider>
+        </Styled.MazeConfig>
+      </div>
+      <Maze
+        grid={grid}
+        restartHandler={restartHandler}
+        finishRestarting={finishedRestarting}
+      />
+    </div>
+  );
 };
 
-export default MazeWrapper;
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(MazeWrapper);
