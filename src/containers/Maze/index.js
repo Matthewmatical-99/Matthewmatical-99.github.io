@@ -119,25 +119,30 @@ const Maze = ({ grid, restartHandler, finishRestarting }) => {
   const limits = { minX, minY, maxX, maxY };
 
   return (grid || null) && (
-    <Styled.MazeWrapper mazeWidth={grid[0].length}>
-      <Styled.Grid tabIndex={0} onKeyPress={moveHandler}>
-        {chunkGrid.map((chunkRow, rowNum) => (
-          <Styled.Row>
-            {chunkRow.map((chunk, colNum) => (
-              <MazeChunk
-                cursorColour={cursorColour}
-                chunkX={colNum}
-                chunkY={rowNum}
-                {...pos} // x and y
-                chunk={chunk}
-                makeHandler={clickMover}
-                limits={limits}
-              />
-            ))}
-          </Styled.Row>
-        ))}
-      </Styled.Grid>
-    </Styled.MazeWrapper>
+    <div>
+      <div className="content-body">
+        <button onClick={() => restartHandler({ key: 'r' })}>Restart</button>
+      </div>
+      <Styled.MazeWrapper mazeWidth={grid[0].length}>
+        <Styled.Grid tabIndex={0} onKeyPress={moveHandler}>
+          {chunkGrid.map((chunkRow, rowNum) => (
+            <Styled.Row>
+              {chunkRow.map((chunk, colNum) => (
+                <MazeChunk
+                  cursorColour={cursorColour}
+                  chunkX={colNum}
+                  chunkY={rowNum}
+                  {...pos} // x and y
+                  chunk={chunk}
+                  makeHandler={clickMover}
+                  limits={limits}
+                />
+              ))}
+            </Styled.Row>
+          ))}
+        </Styled.Grid>
+      </Styled.MazeWrapper>
+    </div>
   );
 };
 
