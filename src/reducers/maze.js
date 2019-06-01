@@ -15,7 +15,6 @@ function parseDims(action) {
 export default function mazeReducer(state = initialState, action) {
   switch (action.type) {
     case Types.MAZE_CONFIG:
-      console.log(action.width, action.height);
       return {
         ...state,
         ...parseDims(action),

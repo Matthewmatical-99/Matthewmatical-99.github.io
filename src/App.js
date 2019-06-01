@@ -8,7 +8,7 @@ import pageRoutes from './constants/page-routes';
 import rootReducer from './reducers';
 import Homepage from './containers/Homepage';
 import ComingSoon from './containers/ComingSoon';
-import Games from './containers/Games';
+import Games from './containers/GamesPage';
 import NavBar from './components/NavBar';
 
 import './App.css';
