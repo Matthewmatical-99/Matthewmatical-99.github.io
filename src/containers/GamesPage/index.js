@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Maze from '../Maze';
+import ConnectFour from '../ConnectFour';
 import * as Styled from './styles';
 
 const Games = () => (
@@ -14,6 +15,9 @@ const Games = () => (
     </div>
     <Styled.GameWrapper>
       <Maze />
+    </Styled.GameWrapper>
+    <Styled.GameWrapper>
+      <ConnectFour />
     </Styled.GameWrapper>
   </div>
 );
