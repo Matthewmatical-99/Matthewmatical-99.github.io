@@ -9,6 +9,7 @@ import rootReducer from './reducers';
 import Homepage from './containers/Homepage';
 import ComingSoon from './containers/ComingSoon';
 import Games from './containers/GamesPage';
+import MemesPage from './containers/MemesPage';
 import NavBar from './components/NavBar';
 
 import './App.css';
@@ -29,7 +30,7 @@ const App = () => (
         <Route path={pageRoutes.HOMEPAGE} exact component={Homepage} />
         <Route path={pageRoutes.ABOUT_ME} component={ComingSoon} />
         <Route path={pageRoutes.GAMES} component={Games} />
-        <Route path={pageRoutes.MEMES} component={ComingSoon} />
+        <Route path={pageRoutes.MEMES} component={MemesPage} />
       </div>
     </Router>
   </Provider>
