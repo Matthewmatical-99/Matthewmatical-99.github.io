@@ -21,9 +21,11 @@ const ConnectFour = ({
   takeTurn,
   dropChips,
   resetGrid,
+  resetDammit,
 }) => {
   const gridCopy = grid.map(gridCol => gridCol.slice());
   const boardFull = () => !gridCopy.some(column => !column[0]);
+
   const doATurn = (colNum) => {
     if (boardFull() || gameOver || gridCopy[colNum][0]) return;
     gridCopy[colNum][gridCopy[colNum].lastIndexOf(0)] = 1;
@@ -32,12 +34,18 @@ const ConnectFour = ({
     const oppMove = easy(gridCopy);
     takeTurn(oppMove);
   };
+
+  const resetTheGrid = () => {
+    dropChips();
+    setTimeout(resetGrid, 1000);
+  }
+
   return (
     <div className="crap">
-      <Styled.CFGrid>
+      <Styled.CFGrid key={resetDammit}>
         {grid.map((col, i) => (
           <Styled.CFColumn key={i} onClick={() => doATurn(i)}>
-            {col.map((cell, j) => <CFCell value={cell} key={[i, j]} />)}
+            {col.map((cell, j) => <CFCell value={cell} key={[i, j]} yPos={j} yeet={open} />)}
           </Styled.CFColumn>
         ))}
       </Styled.CFGrid>
@@ -45,7 +53,7 @@ const ConnectFour = ({
         <p>Connect Four: Be the first to make a line of four chips.</p>
         <p>Select a column to drop a chip there.</p>
         <p>Difficulty options coming soon.</p>
-        <button onClick={resetGrid}>Reset</button>
+        <button onClick={resetTheGrid}>Reset</button>
       </div>
     </div>
   );

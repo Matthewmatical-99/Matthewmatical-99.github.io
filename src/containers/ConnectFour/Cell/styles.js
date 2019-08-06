@@ -2,16 +2,36 @@ import styled from 'styled-components';
 
 const chipColours = ['white', 'red', 'yellow'];
 
-export const CFChip = styled.div`
+export const ChipWrapper = styled.div`
+  @keyframes dropIn {
+    from { top: ${props => (props.dropHeight * -5)}vw; }
+    to: { top: 0px; }
+  }
+
   position: absolute;
   height: 4.2vw;
   width: 4.2vw;
   margin: 0.4vw;
-  border-radius: 50%;
-  background-color: ${props => chipColours[props.value]};
-  display: ${props => props.value ? 'block' : 'none'};
   top: 0px;
   left: 0px;
+  animation: dropIn 0.6s ease-in 0s 1 normal forwards ${props => props.value ? 'running' : 'paused'};
+`;
+
+export const CFChip = styled.div`
+  @keyframes yeet {
+    from { top: 0px; }
+    to { top: calc(100vh + 30vw); }
+  }
+
+  position: absolute;
+  height: 4.2vw;
+  width: 4.2vw;
+  border-radius: 50%;
+  background-color: ${props => chipColours[props.value]};
+  top: 0px;
+  left: 0px;
+  display: ${props => props.value ? 'block' : 'none'};
+  animation: yeet 1s ease-in 0s 1 normal forwards ${props => props.yeet ? 'running' : 'paused'};
 `;
 
 export const CFCellWrapper = styled.div`

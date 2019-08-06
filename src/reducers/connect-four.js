@@ -9,6 +9,7 @@ const initialState = () => ({
   luigi: false,
   useAI: true,
   gameOver: false,
+  resetDammit: false,
 });
 
 export default function CFReducer(state = initialState(), action) {
@@ -29,7 +30,10 @@ export default function CFReducer(state = initialState(), action) {
         open: true,
       };
     case Types.CF_YOTE:
-      return initialState();
+      return {
+        ...initialState(),
+        resetDammit: !state.resetDammit,
+      };
     default:
       return state;
   }

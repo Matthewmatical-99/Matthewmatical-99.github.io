@@ -15,4 +15,5 @@ export const CFColumn = styled.div`
   flex-wrap: no-wrap;
   width: 5vw;
   height: 30vw;
+  overflow: hidden;
 `;

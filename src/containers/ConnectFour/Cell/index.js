@@ -23,7 +23,15 @@ class CFCell extends React.Component {
   render() {
     return (
       <Styled.CFCellWrapper width={window.innerWidth}>
-        <Styled.CFChip value={this.props.value} />
+        <Styled.ChipWrapper
+          dropHeight={this.props.yPos + 1}
+          value={this.props.value}
+        >
+          <Styled.CFChip
+            value={this.props.value}
+            yeet={this.props.yeet}
+          />
+        </Styled.ChipWrapper>
         <Styled.CFGridPiece key={window.innerWidth}>
           <Styled.CFGridHole key={window.innerWidth} />
         </Styled.CFGridPiece>
