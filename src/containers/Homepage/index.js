@@ -20,15 +20,6 @@ function Homepage() {
         >
           My GitHub page
         </a>
-
-        <a
-          className="App-link"
-          href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          More info
-        </a>
       </div>
       <Sanik />
     </div>
