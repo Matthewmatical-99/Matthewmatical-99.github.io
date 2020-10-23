@@ -10,6 +10,7 @@ import Homepage from './containers/Homepage';
 import ComingSoon from './containers/ComingSoon';
 import Games from './containers/GamesPage';
 import MemesPage from './containers/MemesPage';
+import ILoveYouBaby from './containers/ILoveYouBaby';
 import NavBar from './components/NavBar';
 
 import './App.css';
@@ -31,6 +32,7 @@ const App = () => (
         <Route path={pageRoutes.ABOUT_ME} component={ComingSoon} />
         <Route path={pageRoutes.GAMES} component={Games} />
         <Route path={pageRoutes.MEMES} component={MemesPage} />
+        <Route path={pageRoutes.I_LOVE_YOU} component={ILoveYouBaby} />
       </div>
     </Router>
   </Provider>
