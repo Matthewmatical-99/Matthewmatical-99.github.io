@@ -22,6 +22,15 @@ div.content-body {
   padding: 5px;
 }
 
+div.content-body-ily {
+  box-sizing: border-box;
+  background-color: rgb(204, 107, 204);
+  opacity: 1;
+  width: 80vw;
+  margin: 0 10vw;
+  padding: 5px;
+}
+
 div.content-body-right {
   box-sizing: border-box;
   background-color: white;
@@ -40,4 +49,8 @@ div.crap {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
+}
+
+a.no-underline {
+  text-decoration: none;
 }
