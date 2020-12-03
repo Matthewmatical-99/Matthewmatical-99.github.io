@@ -5,11 +5,11 @@ const LuckyPlayer = ({ isPlaying }) => (isPlaying ?
     title="luckyPlayer"
     width="560"
     height="315"
-    src="https://www.youtube.com/embed/8ctkhc1Wkjw?autoplay=1"
+    src="https://www.youtube.com/embed/4gWbcxNGzgE?autoplay=1"
     frameborder="0"
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
     allowFullScreen
-    style={{ display: 'none' }}
+    style={{ display: "none" }}
   /> : null
 );
 
