@@ -23,6 +23,9 @@ const NavBar = () => (
       <Link to={pageRoutes.I_LOVE_YOU}>
         <Styled.NavButton>I love you</Styled.NavButton>
       </Link>
+      <Link to={pageRoutes.THESIS}>
+        <Styled.NavButton>Thesis</Styled.NavButton>
+      </Link>
     </Styled.NavBar>
   </Styled.NavBarWrapper>
 );
