@@ -7,6 +7,7 @@ export const FloatInWrapper = styled(Flex)`
   position: relative;
   opacity: 0;
   top: 0px;
+  left: 0px;
   flex: 1;
   animation: floatin 1s ease-out ${delay} 1 normal forwards ${props => props.scrolled ? 'running' : 'paused'};
 

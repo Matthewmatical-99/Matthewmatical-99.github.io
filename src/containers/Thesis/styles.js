@@ -3,28 +3,39 @@ import { Flex } from 'rebass';
 
 export const ThesisHeaderContainer = styled(Flex)`
   flex: 1;
+  position: relative;
+  top: 0;
+  left: 0;
 `;
 
-// Got sick of trying to figure out how to make the image fit nicely.
-// Enjoy the evil hardcoded aspect ratio.
+// Got sick of trying to figure out how to make images fit nicely.
+// Enjoy all the evil hardcoded aspect ratios.
 export const ThesisHeader = styled.img`
   height: ${() => 533100/7997}vw;
   width: 100vw;
 `;
 
-export const TestImg = styled.img`
+export const ThesisProgFrame = styled.img`
   width: 22vw;
   height: ${() => 2419*22/1709}vw;
   padding: 0 5vw;
-  margin: 3vw auto;
+  margin: 3vw 0;
 `;
 
 export const GridSpacer = styled.div`
-  width: 22vw;
+  width: 35vw;
   height: ${() => 2419*22/1709}vw;
-  padding: 0 5vw;
-  margin: 3vw auto;
-  opacity: 0;
+  padding: 0 5vw 0 24vw;
+  margin: 3vw 0;
+  display: flex;
+  text-align: left;
+`;
+
+export const GridCaption = styled.p`
+  opacity: 1;
+  font-family: "Syne";
+  margin-top: auto;
+  font-size: 0.825vw;
 `;
 
 export const ImagesRow = styled(Flex)`
@@ -33,16 +44,6 @@ export const ImagesRow = styled(Flex)`
   justify-content: space-around;
   margin: 0 2vw;
   position: relative;
-`;
-
-export const ThesisBigBlackTitle = styled.img`
-  width: 110vw;
-  height: 160vw;
-  z-index: -1;
-  position: absolute;
-  top: -5vw;
-  left: 0;
-  overflow: hidden;
 `;
 
 export const ThesisFirstTitleContainer = styled.div`
@@ -66,7 +67,6 @@ export const ThesisSecondImage = styled.img`
   height: 52.5vw;
   margin: 0;
   padding: 0;
-  z-index: 69;
 `;
 
 export const HoriSpacer = styled.div`
@@ -78,12 +78,68 @@ export const HoriSpacer = styled.div`
 `;
 
 export const VideoBackground = styled.div`
-  width: 100vw;
+  width: 88vw;
   height: 69vw;
   background-color: #100c0c;
+  padding: 0 6vw;
+  display: flex;
+  flex: 1;
+  flex-flow: row no-wrap;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+export const SideText = styled.p`
+  width: 20vw;
+  margin: auto;
+  font-family: "Syne";
+  font-size: 0.825vw;
+  text-align: left;
+  color: #FFFFFF;
 `;
 
 export const BottomImage = styled.img`
   width: 100vw;
   height: 150vw;
+`;
+
+export const ThesisSecondTitle = styled.svg`
+  width: 112vw;
+  z-index: -1;
+  position: absolute;
+  top: -38vw;
+  left: -6vw;
+`;
+
+export const BottomText = styled.p`
+  text-align: center;
+  margin: auto;
+  width: 55vw;
+  color: #FFFFFF;
+  font-family: "Syne";
+  font-size: 0.825vw;
+`;
+
+export const BottomTextBackground = styled.div`
+  width: 88vw;
+  min-height: 25vw;
+  background-color: #100c0c;
+  padding: 0 6vw;
+  display: flex;
+  flex: 1;
+  flex-flow: row no-wrap;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+export const CreditsBackground = styled.div`
+  width: 88vw;
+  min-height: 25vw;
+  background-color: #100c0c;
+  padding: 0 6vw;
+  display: flex;
+  flex: 1;
+  flex-flow: row no-wrap;
+  justify-content: space-between;
+  align-items: center;
 `;
