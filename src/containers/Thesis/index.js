@@ -15,6 +15,13 @@ import thesisFrames from './assets/frames';
 import bottomImage from './assets/bottom_image_smol.png';
 import progVideo from './assets/progression_smol.mp4';
 import roomVideo from './assets/room_smol.mp4';
+import nameList from './assets/credit1.svg';
+import specialThanks from './assets/credit2.svg';
+import meanism from './assets/credit3.svg';
+import indicator from './assets/indicator.svg';
+import numbers from './assets/numbers.svg';
+import cloudSound from './assets/cloudsound_smol.jpg';
+import cloudButt from './assets/cloudbutt.svg'
 
 import ThesisSong from './assets/through.mp3';
 
@@ -23,16 +30,8 @@ import useBooleanState from '../../hooks/useBooleanState';
 import * as Styled from './styles';
 
 const Thesis = () => {
-  const [play, { sound, pause }] = useSound(ThesisSong, { loop: true, autoplay: true });
+  const [play, { sound }] = useSound(ThesisSong, { loop: true, autoplay: true, mute: true });
   const muted = useBooleanState(true);
-
-  const pauseResume = () => {
-    if (sound.playing()) {
-      pause();
-    } else {
-      play();
-    }
-  };
 
   const toggleMute = () => {
     sound.mute(!muted.state);
@@ -48,6 +47,8 @@ const Thesis = () => {
       flex={1}
     >
       <MuteButton toggleMute={toggleMute} mutedState={muted.state} />
+      <Styled.Indicator src={indicator} />
+      <Styled.Numbers src={numbers} />
       <Styled.ThesisHeaderContainer>
         <Styled.ThesisHeader src={thesisHeaderImg} />
         <ReactPlayer
@@ -126,6 +127,21 @@ const Thesis = () => {
       <Styled.BottomTextBackground>
         <Styled.BottomText>{bottomText}</Styled.BottomText>
       </Styled.BottomTextBackground>
+      <Styled.CloudSoundCloud>
+        <Styled.CloudSoundBackground src={cloudSound} />
+        <a
+          href="https://soundcloud.com/supermean-athittiya/through"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Styled.CloudButt src={cloudButt} />
+        </a>
+      </Styled.CloudSoundCloud>
+      <Styled.CreditsBackground>
+        <Styled.SpecialThanks src={specialThanks} />
+        <Styled.NameList src={nameList} />
+        <Styled.Meanism src={meanism} />
+      </Styled.CreditsBackground>
     </Flex>
   );
 };

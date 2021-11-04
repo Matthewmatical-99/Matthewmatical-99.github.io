@@ -133,13 +133,60 @@ export const BottomTextBackground = styled.div`
 `;
 
 export const CreditsBackground = styled.div`
-  width: 88vw;
+  width: 100vw;
   min-height: 25vw;
   background-color: #100c0c;
-  padding: 0 6vw;
+  padding: 0;
   display: flex;
   flex: 1;
-  flex-flow: row no-wrap;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
+`;
+
+export const SpecialThanks = styled.img`
+  width: 20vw;
+  height: 5vw;
+  margin: 10vw 70vw 2vw 10vw;
+`;
+export const NameList = styled.img`
+  width: 15vw;
+  height: 20vw;
+  margin: 0 75vw 0 10vw;
+`;
+export const Meanism = styled.img`
+  width: 15vw;
+  height: 5vw;
+  margin: 0 10vw 5vw 75vw;
+`;
+
+export const Indicator = styled.img`
+  width: 100vw;
+`;
+
+export const Numbers = styled.img`
+  width: 60vw;
+  height: 2vw;
+  margin: 1vw 16.5vw 5vw 23.5vw;
+`
+
+export const CloudSoundCloud = styled.div`
+  width: 100vw;
+  height: 43.63vw;
+  position: relative;
+  top: 0;
+  left: 0;
+`;
+
+export const CloudSoundBackground = styled.img`
+  width: 100vw;
+  height: 43.63vw;
+`;
+
+export const CloudButt = styled.img`
+  width: 18vw;
+  height: 6vw;
+  position: absolute;
+  top: 18.5vw;
+  right: 18vw;
 `;
