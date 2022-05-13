@@ -22,7 +22,7 @@ const CollatzPhoneInput = () => {
         }}>Submit</button>
       </Flex>
     </Flex>
-  )
+  );
 };
 
 export default CollatzPhoneInput;
