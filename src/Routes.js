@@ -7,18 +7,13 @@ import Homepage from './containers/Homepage';
 import ComingSoon from './containers/ComingSoon';
 import Games from './containers/GamesPage';
 import MemesPage from './containers/MemesPage';
-import ILoveYouBaby from './containers/ILoveYouBaby';
 import NavBar from './components/NavBar';
 
 import './App.css';
 
-const Routes = ({ location }) => {
-  const onILoveYouPage = (location.pathname === pageRoutes.I_LOVE_YOU);
-  
-  const title = onILoveYouPage ? 'I love you, babie <3' : 'Zoey\'s Website of Dank Memes';
-  const backgroundImage = onILoveYouPage
-    ? 'https://media.istockphoto.com/photos/heart-bokeh-background-picture-id508495114?k=6&m=508495114&s=612x612&w=0&h=v_eH62lNY9sOhKIk97L_uksL4IcCtywehHwGEYTaJaM='
-    : 'https://imgur.com/kgbYeVO.jpg';
+const Routes = () => {
+  const title = 'Zoey\'s Website of Dank Memes';
+  const backgroundImage = 'https://imgur.com/kgbYeVO.jpg';
   
   return (
     <div className="App" style={{ backgroundImage: `url(${backgroundImage})` }}>
@@ -30,7 +25,6 @@ const Routes = ({ location }) => {
       <Route path={pageRoutes.ABOUT_ME} component={ComingSoon} />
       <Route path={pageRoutes.GAMES} component={Games} />
       <Route path={pageRoutes.MEMES} component={MemesPage} />
-      <Route path={pageRoutes.I_LOVE_YOU} component={ILoveYouBaby} />
     </div>
   );
 };
