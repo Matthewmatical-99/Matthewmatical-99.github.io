@@ -1,5 +1,5 @@
 import React from 'react';
-import Slider from '@material-ui/lab/Slider';
+import Slider from '@material-ui/core/Slider';
 
 const mazeConfigInput = ({ value, height, handler, name }) => {
   return (

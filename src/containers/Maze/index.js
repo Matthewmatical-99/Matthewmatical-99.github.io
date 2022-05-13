@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import * as R from 'ramda';
 
 import { mazeConfig } from '../../actions';
 import Input from './input';
@@ -21,9 +22,21 @@ class MazeChunk extends React.Component {
   shouldComponentUpdate(newProps) {
     const { chunk, x, y, chunkX, chunkY } = this.props;
     const { minX, minY, maxX, maxY } = newProps.limits;
+
+    // Can I simplify this? Not yet.
+    // TODO: try using a ref for the player's position,
+    // so the handlers don't have to rerender to receive the new position
+    // const restarted = (chunk !== newProps.chunk);
+    // const playerWasHere = (Math.floor(x / CHUNK_SIZE) === chunkX &&
+    //                        Math.floor(y / CHUNK_SIZE) === chunkY);
+    // const playerWillBeHere = (Math.floor(newProps.x / CHUNK_SIZE) === chunkX &&
+    //                           Math.floor(newProps.y / CHUNK_SIZE) === chunkY);
+    // return restarted || playerWasHere || playerWillBeHere;
+
     /* eslint-disable no-mixed-operators */
-    return (chunk !== newProps.chunk || // if a new maze was generated
-      (newProps.x !== x || newProps.y !== y) && (
+    return (chunk !== newProps.chunk || // re-render if a new maze was generated,
+      (newProps.x !== x || newProps.y !== y) && ( // or if the player moved...
+        // ...and they might be in this chunk
         Math.floor(newProps.x / CHUNK_SIZE) === chunkX && minY <= chunkY && maxY >= chunkY ||
         Math.floor(newProps.y / CHUNK_SIZE) === chunkY && minX <= chunkX && maxX >= chunkX
     ));
@@ -58,7 +71,7 @@ const Maze = ({ grid, restartHandler, finishRestarting }) => {
   const [chunkGrid, setChunkGrid] = React.useState([]);
 
   const won = pos.x === grid[0].length - 2 && pos.y === grid.length - 1;
-  const cursorColour = won ? 'green' : 'red';
+  const cursorColour = won ? 'lightgreen' : 'red';
   React.useEffect(() => {
     setPos({ x: 1, y: 1 });
     const chunkW = Math.ceil(grid[0].length / CHUNK_SIZE);
@@ -113,10 +126,13 @@ const Maze = ({ grid, restartHandler, finishRestarting }) => {
 
   // These are used to determine which chunks could be entered during the next move, so they will re-render as needed.
   let [minX, minY, maxX, maxY] = [pos.x, pos.y, pos.x, pos.y];
-  for (maxY = pos.y; maxY < grid.length - 1 && grid[maxY + 1][pos.x]; maxY++) {}
-  for (maxX = pos.x; grid[pos.y][maxX + 1]; maxX++) {}
-  for (minX = pos.x; grid[pos.y][minX - 1]; minX--) {}
-  for (minY = pos.y; grid[minY - 1][pos.x]; minY--) {}
+  // No-throw grid access. Is passed [y,x] and returns grid[y][x], or undefined if out of range.
+  const gridIsOpenAt = R.partialRight(R.path, [grid]);
+  // Walk from current point in all directions until we hit a wall; record how far we get.
+  for (maxY = pos.y; gridIsOpenAt([maxY + 1, pos.x]); maxY++) {}
+  for (maxX = pos.x; gridIsOpenAt([pos.y, maxX + 1]); maxX++) {}
+  for (minX = pos.x; gridIsOpenAt([pos.y, minX - 1]); minX--) {}
+  for (minY = pos.y; gridIsOpenAt([minY - 1, pos.x]); minY--) {}
   minX = Math.floor(minX / CHUNK_SIZE);
   minY = Math.floor(minY / CHUNK_SIZE);
   maxX = Math.floor(maxX / CHUNK_SIZE);
