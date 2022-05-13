@@ -1,4 +1,5 @@
 import React from 'react';
+import CollatzPhoneInput from '../../components/CollatzPhoneInput';
 
 import Sanik from '../../components/Sanik';
 
@@ -20,6 +21,8 @@ function Homepage() {
         >
           My GitHub page
         </a>
+        <p>Check out this very user-friendly phone-number input!</p>
+        <CollatzPhoneInput />
       </div>
       <Sanik />
     </div>
