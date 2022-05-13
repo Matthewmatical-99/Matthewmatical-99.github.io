@@ -9,7 +9,7 @@ import './App.css';
 const Header = ({ location }) => {
   const onILoveYouPage = (location.pathname === pageRoutes.I_LOVE_YOU);
   
-  const title = onILoveYouPage ? 'I love you, babie <3' : 'Matthew Phillips\' Website of Dank Memes';
+  const title = onILoveYouPage ? 'I love you, babie <3' : 'Zoey\'s Website of Dank Memes';
   const backgroundImage = onILoveYouPage
     ? 'https://media.istockphoto.com/photos/heart-bokeh-background-picture-id508495114?k=6&m=508495114&s=612x612&w=0&h=v_eH62lNY9sOhKIk97L_uksL4IcCtywehHwGEYTaJaM='
     : 'https://imgur.com/kgbYeVO.jpg';
