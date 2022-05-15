@@ -11,6 +11,7 @@ const Games = () => (
     </div>
     <div className="content-body">
       <p>Maze: Use WASD to move. Exit is in lower-right corner. Press R or click the button below to generate a new maze.</p>
+      <p>Click anywhere on the maze before using the keyboard.</p>
       <p>Alternatively, tap/click any directly connected (same row/column) location to move there.</p>
     </div>
     <Styled.GameWrapper>
