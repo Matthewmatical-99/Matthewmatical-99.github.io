@@ -8,6 +8,7 @@ import * as Styled from './styles';
 
 const CHUNK_SIZE = 8;
 const CELL_SIZE = 10;
+const MAZE_ROOT_ID = 'maze-root';
 
 const takeChunk = (grid, x, y) => {
   const chunk = Array(CHUNK_SIZE).fill(null);
@@ -35,7 +36,7 @@ class MazeChunk extends React.Component {
     return (
       <Styled.Chunk>
         {chunk.map((row, rowNum) => (
-          <Styled.Row>
+          <Styled.Row key={"" + rowNum}>
             {row.map((cell, colNum) => {
               const cellX = chunkX * CHUNK_SIZE + colNum;
               const cellY = chunkY * CHUNK_SIZE + rowNum;
@@ -43,6 +44,7 @@ class MazeChunk extends React.Component {
                 <Styled.Cell
                   hall={cell}
                   style={(cellX === x && cellY === y) ? { backgroundColor: cursorColour } : {}}
+                  key={'' + colNum}
                 /> 
               );
             })}
@@ -97,10 +99,28 @@ const Maze = ({ grid, restartHandler, finishRestarting }) => {
     }
   };
 
+  // Find maze root element (Styled.Grid) from any descendant of it.
+  // Useful for enabling navigation of arbitrary-depth cell chunk trees.
+  const getMazeRoot = node => {
+    if (!node) return null;
+    if (node.id === MAZE_ROOT_ID) return node;
+    return getMazeRoot(node.parentNode);
+  };
+
   const unifiedClickMover = event => {
-    const mazeBounds = event.target.parentNode.parentNode.parentNode.parentNode.getBoundingClientRect();
-    const clickedCellX = Math.floor((event.clientX - mazeBounds.left) / CELL_SIZE);
-    const clickedCellY = Math.floor((event.clientY - mazeBounds.top) / CELL_SIZE);
+    // Don't move if player has already won.
+    if (won) return;
+    
+    // Find maze root, and calculate click position relative to maze position.
+    const mazeRootElement = getMazeRoot(event.target);
+    console.log(mazeRootElement.scrollLeft);
+    const mazeBounds = mazeRootElement.getBoundingClientRect();
+    
+    // Then divide by cell size to find which cell was clicked.
+    const clickedCellX = Math.floor((event.clientX + mazeRootElement.scrollLeft - mazeBounds.left) / CELL_SIZE);
+    const clickedCellY = Math.floor((event.clientY + mazeRootElement.scrollTop - mazeBounds.top) / CELL_SIZE);
+
+    // Check that the clicked cell is a valid move; make the move if it is.
     if (clickedCellX === pos.x) {
       for (let i = Math.min(pos.y, clickedCellY); i <= Math.max(pos.y, clickedCellY); i++) {
         if (!grid[i][pos.x]) return;
@@ -116,9 +136,9 @@ const Maze = ({ grid, restartHandler, finishRestarting }) => {
 
   return (grid || null) && (
     <Styled.MazeWrapper mazeWidth={grid[0].length}>
-      <Styled.Grid tabIndex={0} onKeyPress={moveHandler} onClick={unifiedClickMover}>
+      <Styled.Grid tabIndex={0} onKeyPress={moveHandler} onClick={unifiedClickMover} id={MAZE_ROOT_ID}>
         {chunkGrid.map((chunkRow, rowNum) => (
-          <Styled.Row>
+          <Styled.Row key={'' + rowNum}>
             {chunkRow.map((chunk, colNum) => (
               <MazeChunk
                 cursorColour={cursorColour}
@@ -126,6 +146,7 @@ const Maze = ({ grid, restartHandler, finishRestarting }) => {
                 chunkY={rowNum}
                 {...pos} // x and y
                 chunk={chunk}
+                key={'' + colNum}
               />
             ))}
           </Styled.Row>
