@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import * as R from 'ramda';
 
 import { mazeConfig } from '../../actions';
 import Input from './input';
@@ -8,6 +7,7 @@ import makeMaze from './maze-generation-utils';
 import * as Styled from './styles';
 
 const CHUNK_SIZE = 8;
+const CELL_SIZE = 10;
 
 const takeChunk = (grid, x, y) => {
   const chunk = Array(CHUNK_SIZE).fill(null);
@@ -21,29 +21,17 @@ const takeChunk = (grid, x, y) => {
 class MazeChunk extends React.Component {
   shouldComponentUpdate(newProps) {
     const { chunk, x, y, chunkX, chunkY } = this.props;
-    const { minX, minY, maxX, maxY } = newProps.limits;
 
-    // Can I simplify this? Not yet.
-    // TODO: try using a ref for the player's position,
-    // so the handlers don't have to rerender to receive the new position
-    // const restarted = (chunk !== newProps.chunk);
-    // const playerWasHere = (Math.floor(x / CHUNK_SIZE) === chunkX &&
-    //                        Math.floor(y / CHUNK_SIZE) === chunkY);
-    // const playerWillBeHere = (Math.floor(newProps.x / CHUNK_SIZE) === chunkX &&
-    //                           Math.floor(newProps.y / CHUNK_SIZE) === chunkY);
-    // return restarted || playerWasHere || playerWillBeHere;
-
-    /* eslint-disable no-mixed-operators */
-    return (chunk !== newProps.chunk || // re-render if a new maze was generated,
-      (newProps.x !== x || newProps.y !== y) && ( // or if the player moved...
-        // ...and they might be in this chunk
-        Math.floor(newProps.x / CHUNK_SIZE) === chunkX && minY <= chunkY && maxY >= chunkY ||
-        Math.floor(newProps.y / CHUNK_SIZE) === chunkY && minX <= chunkX && maxX >= chunkX
-    ));
+    const restarted = (chunk !== newProps.chunk);
+    const playerWasHere = (Math.floor(x / CHUNK_SIZE) === chunkX &&
+                           Math.floor(y / CHUNK_SIZE) === chunkY);
+    const playerWillBeHere = (Math.floor(newProps.x / CHUNK_SIZE) === chunkX &&
+                              Math.floor(newProps.y / CHUNK_SIZE) === chunkY);
+    return restarted || playerWasHere || playerWillBeHere;
   }
 
   render() {
-    const { chunk, chunkX, chunkY, cursorColour, makeHandler, x, y } = this.props;
+    const { chunk, chunkX, chunkY, cursorColour, x, y } = this.props;
     return (
       <Styled.Chunk>
         {chunk.map((row, rowNum) => (
@@ -55,7 +43,6 @@ class MazeChunk extends React.Component {
                 <Styled.Cell
                   hall={cell}
                   style={(cellX === x && cellY === y) ? { backgroundColor: cursorColour } : {}}
-                  onClick={makeHandler(cellX, cellY)}
                 /> 
               );
             })}
@@ -110,38 +97,26 @@ const Maze = ({ grid, restartHandler, finishRestarting }) => {
     }
   };
 
-  const clickMover = (clickX, clickY) => (() => {
-    if (clickX === pos.x) {
-      for (let i = Math.min(pos.y, clickY); i <= Math.max(pos.y, clickY); i++) {
+  const unifiedClickMover = event => {
+    const mazeBounds = event.target.parentNode.parentNode.parentNode.parentNode.getBoundingClientRect();
+    const clickedCellX = Math.floor((event.clientX - mazeBounds.left) / CELL_SIZE);
+    const clickedCellY = Math.floor((event.clientY - mazeBounds.top) / CELL_SIZE);
+    if (clickedCellX === pos.x) {
+      for (let i = Math.min(pos.y, clickedCellY); i <= Math.max(pos.y, clickedCellY); i++) {
         if (!grid[i][pos.x]) return;
       }
-      setPos({ x: pos.x, y: clickY });
-    } else if (clickY === pos.y) {
-      for (let i = Math.min(pos.x, clickX); i <= Math.max(pos.x, clickX); i++) {
+      setPos({ x: pos.x, y: clickedCellY });
+    } else if (clickedCellY === pos.y) {
+      for (let i = Math.min(pos.x, clickedCellX); i <= Math.max(pos.x, clickedCellX); i++) {
         if (!grid[pos.y][i]) return;
       }
-      setPos({ x: clickX, y: pos.y });
+      setPos({ x: clickedCellX, y: pos.y });
     }
-  });
-
-  // These are used to determine which chunks could be entered during the next move, so they will re-render as needed.
-  let [minX, minY, maxX, maxY] = [pos.x, pos.y, pos.x, pos.y];
-  // No-throw grid access. Is passed [y,x] and returns grid[y][x], or undefined if out of range.
-  const gridIsOpenAt = R.partialRight(R.path, [grid]);
-  // Walk from current point in all directions until we hit a wall; record how far we get.
-  for (maxY = pos.y; gridIsOpenAt([maxY + 1, pos.x]); maxY++) {}
-  for (maxX = pos.x; gridIsOpenAt([pos.y, maxX + 1]); maxX++) {}
-  for (minX = pos.x; gridIsOpenAt([pos.y, minX - 1]); minX--) {}
-  for (minY = pos.y; gridIsOpenAt([minY - 1, pos.x]); minY--) {}
-  minX = Math.floor(minX / CHUNK_SIZE);
-  minY = Math.floor(minY / CHUNK_SIZE);
-  maxX = Math.floor(maxX / CHUNK_SIZE);
-  maxY = Math.floor(maxY / CHUNK_SIZE);
-  const limits = { minX, minY, maxX, maxY };
+  };
 
   return (grid || null) && (
     <Styled.MazeWrapper mazeWidth={grid[0].length}>
-      <Styled.Grid tabIndex={0} onKeyPress={moveHandler}>
+      <Styled.Grid tabIndex={0} onKeyPress={moveHandler} onClick={unifiedClickMover}>
         {chunkGrid.map((chunkRow, rowNum) => (
           <Styled.Row>
             {chunkRow.map((chunk, colNum) => (
@@ -151,8 +126,6 @@ const Maze = ({ grid, restartHandler, finishRestarting }) => {
                 chunkY={rowNum}
                 {...pos} // x and y
                 chunk={chunk}
-                makeHandler={clickMover}
-                limits={limits}
               />
             ))}
           </Styled.Row>
