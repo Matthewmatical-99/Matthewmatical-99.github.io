@@ -5,13 +5,18 @@ export const Cell = styled.div`
   min-width: 10px;
   max-height: 10px;
   max-width: 10px;
-  background-color: ${props => props.hall ? 'white' : 'black'};
+  background-color: ${props => (!!props.cellColour ? props.cellColour : (props.hall ? 'white' : 'black'))};
   opacity: 1;
 `;
 
 export const Row = styled.div`
   display: flex;
   flex-direction: row;
+`;
+
+export const Col = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 
 export const Chunk = styled.div`
@@ -26,7 +31,8 @@ export const Grid = styled.div`
   overflow: auto;
   margin-right: 18px;
   margin-bottom: 0px;
-  @media (max-width: ${props => props.mazeWidth * 10}px) {
+  margin-left: 0px;
+  @media (min-width: ${props => props.mazeWidth * 10}px) {
     align-self: flex-start;
   }
 `;

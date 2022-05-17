@@ -11,6 +11,7 @@ const useObjectState = (initialState = {}) => {
   const updateOne = R.pipe(R.objOf, update);
 
   return {
+    state,
     value: state,
     update,
     updateOne,
