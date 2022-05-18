@@ -7,6 +7,8 @@ import MazeChunk from './mazeChunk';
 
 import * as Styled from './styles';
 
+// Idea: turn this entire fucker into an SVG; maybe it'll run faster?
+
 const Maze = ({ mazeHook }) => {
   const { mazeNum, width, height } = mazeHook.state;
   return ((height || null) && (
