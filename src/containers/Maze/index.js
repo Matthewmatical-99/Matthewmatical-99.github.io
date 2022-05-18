@@ -34,6 +34,7 @@ const gameStatesEqual = (oldProps, newProps) => (
   oldProps.mazeNum === newProps.mazeNum
 );
 
+// Prevents changes to width/height slider from rerendering parts of the maze
 const MemoizedMaze = memo(Maze, gameStatesEqual);
 
 const MazeWrapper = () => {
