@@ -5,7 +5,7 @@ export const Cell = styled.div`
   min-width: 10px;
   max-height: 10px;
   max-width: 10px;
-  background-color: ${props => (!!props.cellColour ? props.cellColour : (props.hall ? 'white' : 'black'))};
+  background-color: ${props => props.cellColour};
   opacity: 1;
 `;
 
@@ -15,11 +15,6 @@ export const Row = styled.div`
 `;
 
 export const Col = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-export const Chunk = styled.div`
   display: flex;
   flex-direction: column;
 `;
