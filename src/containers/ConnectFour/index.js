@@ -1,44 +1,23 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import Switch from '@material-ui/core/Switch';
+import { Flex } from 'rebass';
 
-import { CFActions } from '../../actions';
-import { easy } from './opponent';
 import CFCell from './Cell';
+import useCF from './useCF';
+
 import * as Styled from './styles';
 
-const mapStateToProps = state => state.connectFour;
-
-const mapDispatchToProps = dispatch => ({
-  takeTurn: col => dispatch(CFActions.takeTurn(col)),
-  dropChips: () => dispatch(CFActions.dropChips()),
-  resetGrid: () => dispatch(CFActions.resetGrid()),
-});
-
-const ConnectFour = ({
-  grid,
-  open,
-  gameOver,
-  takeTurn,
-  dropChips,
-  resetGrid,
-  resetDammit,
-}) => {
-  const gridCopy = grid.map(gridCol => gridCol.slice());
-  const boardFull = () => !gridCopy.some(column => !column[0]);
-
-  const doATurn = (colNum) => {
-    if (boardFull() || gameOver || gridCopy[colNum][0]) return;
-    gridCopy[colNum][gridCopy[colNum].lastIndexOf(0)] = 1;
-    takeTurn(colNum);
-    if (boardFull()) return;
-    const oppMove = easy(gridCopy);
-    takeTurn(oppMove);
-  };
-
-  const resetTheGrid = () => {
-    dropChips();
-    setTimeout(resetGrid, 1000);
-  }
+const ConnectFour = () => {
+  const {
+    grid,
+    open,
+    resetDammit,
+    twoPlayerGame,
+    resetGrid,
+    doATurn,
+    getStatus,
+    switchTwoPlayers,
+  } = useCF();
 
   return (
     <div className="crap">
@@ -53,13 +32,16 @@ const ConnectFour = ({
         <p>Connect Four: Be the first to make a line of four chips.</p>
         <p>Select a column to drop a chip there.</p>
         <p>Difficulty options coming soon.</p>
-        <button onClick={resetTheGrid}>Reset</button>
+        <button onClick={resetGrid}>Reset</button>
+        <Flex justifyContent="center" alignItems="center">
+          <Switch value={twoPlayerGame} onClick={switchTwoPlayers} />
+          <p>2-player game</p>
+        </Flex>
+        
+        <p>{getStatus()}</p>
       </div>
     </div>
   );
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ConnectFour);
+export default ConnectFour;

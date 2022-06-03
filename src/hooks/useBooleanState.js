@@ -17,6 +17,7 @@ const useBooleanState = (initialState = false) => {
 
   return {
     state,
+    value: state,
     setState,
     setFalse,
     setTrue,

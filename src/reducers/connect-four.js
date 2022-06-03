@@ -1,5 +1,5 @@
 import Types from '../actions/action-types';
-import { checkWin } from '../containers/ConnectFour/helpers';
+import { didWin } from '../containers/ConnectFour/helpers';
 
 const makeEmptyGrid = () => Array(7).fill('column').map(() => Array(6).fill(0));
 
@@ -7,7 +7,6 @@ const initialState = () => ({
   grid: makeEmptyGrid(),
   open: false,
   luigi: false,
-  useAI: true,
   gameOver: false,
   resetDammit: false,
 });
@@ -22,7 +21,7 @@ export default function CFReducer(state = initialState(), action) {
         ...state,
         luigi: !state.luigi,
         grid,
-        gameOver: state.gameOver || checkWin(grid, action.col, y),
+        gameOver: state.gameOver || didWin(grid, action.col, y),
       };
     case Types.CF_YEET:
       return {
