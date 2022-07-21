@@ -4,7 +4,7 @@ import { withRouter, Route } from 'react-router-dom';
 
 import pageRoutes from './constants/page-routes';
 import Homepage from './containers/Homepage';
-import ComingSoon from './containers/ComingSoon';
+import AboutMePage from './containers/AboutMePage';
 import Games from './containers/GamesPage';
 import MemesPage from './containers/MemesPage';
 import NavBar from './components/NavBar';
@@ -22,7 +22,7 @@ const Routes = () => {
       </header>
       <NavBar />
       <Route path={pageRoutes.HOMEPAGE} exact component={Homepage} />
-      <Route path={pageRoutes.ABOUT_ME} component={ComingSoon} />
+      <Route path={pageRoutes.ABOUT_ME} component={AboutMePage} />
       <Route path={pageRoutes.GAMES} component={Games} />
       <Route path={pageRoutes.MEMES} component={MemesPage} />
     </div>
