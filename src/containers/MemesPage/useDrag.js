@@ -4,7 +4,7 @@ import useBooleanState from '../../hooks/useBooleanState';
 
 const NO_OFFSET = { left: 0, top: 0 };
 
-const useDrag = (counter, parentOffsets = NO_OFFSET) => {
+const useDrag = (counter, parentOffsets = NO_OFFSET, setAttachment = () => {}) => {
   const attachedToParent = useBooleanState(true);
   const startPosRef = useRef(null);
   const [detachmentOffsets, setDetachmentOffsets] = useState(NO_OFFSET);
@@ -24,6 +24,7 @@ const useDrag = (counter, parentOffsets = NO_OFFSET) => {
     if (attachedToParent.state){
       attachedToParent.setFalse();
       setDetachmentOffsets(parentOffsets);
+      setAttachment(false);
     }
   };
 
@@ -50,6 +51,7 @@ const useDrag = (counter, parentOffsets = NO_OFFSET) => {
     jumpTo(NO_OFFSET);
     attachedToParent.setTrue();
     setDetachmentOffsets(NO_OFFSET);
+    setAttachment(true);
   };
   
   return {

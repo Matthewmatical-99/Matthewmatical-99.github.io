@@ -7,6 +7,7 @@ import InstaPost from './InstaPost';
 import DraggyBoi from './DraggyBoi';
 
 import * as Styled from './styles';
+import useListState from '../../hooks/useListState';
 
 const MemesFolder = ({ memeIds, counter }) => {
   const [memeResetters, setMemeResetters] = useState([]);
@@ -19,6 +20,8 @@ const MemesFolder = ({ memeIds, counter }) => {
   const allMemesLoaded = (loadedMemesCounter.count >= memeIds.length);
 
   const folderDragHook = useDrag(counter);
+
+  const memesAttachmentStatus = useListState(R.repeat(true, memeIds.length));
 
   return (
     <Styled.FolderContainer
@@ -36,17 +39,20 @@ const MemesFolder = ({ memeIds, counter }) => {
         draggable
         {...folderDragHook.dragHandlers}
       >
-        {memeIds.map(memeId => (
-          <DraggyBoi
-            subscribeToResets={appendMeme}
-            updateFolderHeight={updateFolderHeight}
-            counter={counter}
-            absolute
-          >
-            <InstaPost postId={memeId} />
-          </DraggyBoi>
+        {memeIds.map((memeId, index) => (
+          memesAttachmentStatus.value[index] ? (
+            <DraggyBoi
+              subscribeToResets={appendMeme}
+              updateFolderHeight={updateFolderHeight}
+              counter={counter}
+              absolute
+              setAttachment={memesAttachmentStatus.updateOne(index)}
+              folderOffsets={folderDragHook.offsets}
+            >
+              <InstaPost postId={memeId} />
+            </DraggyBoi>
+          ) : null
         ))}
-
       </Styled.FolderMain>
       <Styled.FolderCover
         onClick={resetMemes}
@@ -57,6 +63,20 @@ const MemesFolder = ({ memeIds, counter }) => {
           zIndex: folderDragHook.z,
         }}
       />
+      {memeIds.map((memeId, index) => (
+        memesAttachmentStatus.value[index] ? null : (
+          <DraggyBoi
+            subscribeToResets={appendMeme}
+            updateFolderHeight={updateFolderHeight}
+            counter={counter}
+            absolute
+            setAttachment={memesAttachmentStatus.updateOne(index)}
+            folderOffsets={folderDragHook.offsets}
+          >
+            <InstaPost postId={memeId} />
+          </DraggyBoi>
+        )
+      ))}
     </Styled.FolderContainer>
   );
 };

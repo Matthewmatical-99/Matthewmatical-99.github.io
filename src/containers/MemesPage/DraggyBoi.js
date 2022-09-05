@@ -12,9 +12,10 @@ const DraggyBoi = ({
     updateFolderHeight,
     absolute,
     counter,
-    folderOffsets
+    folderOffsets,
+    setAttachment,
   }) => {
-  const dragHook = useDrag(counter, folderOffsets);
+  const dragHook = useDrag(counter, folderOffsets, setAttachment);
 
   // When the content within has loaded, notify parent so it can resize itself.
   const { nodeRef } = useFinalHeight(updateFolderHeight);
