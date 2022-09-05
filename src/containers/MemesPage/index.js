@@ -16,6 +16,7 @@ function MemesPage() {
   return (
     <div>
       <div className="content-body">
+        <p>To click on a post instead of dragging it, please double-click instead.</p>
         <p>More memes coming soon!</p>
         <a
           href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
