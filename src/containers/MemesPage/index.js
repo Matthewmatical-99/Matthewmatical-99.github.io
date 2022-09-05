@@ -1,9 +1,18 @@
 import React from 'react';
 
-import Sanik from '../../components/Sanik';
 import MlgFrog from '../../components/MlgFrog';
+import useCounter from '../../hooks/useCounter';
+import MemesFolder from './MemesFolder';
+
+import * as Styled from './styles';
+
+const rosiePostId = "CgXyZoaujMV";
+const myPostId = "CgZSrvxOaC0";
+const tgmPostId = 'CiG2aaoMYwx';
 
 function MemesPage() {
+  const counter = useCounter();
+
   return (
     <div>
       <div className="content-body">
@@ -17,7 +26,11 @@ function MemesPage() {
         </a>
         <MlgFrog />
       </div>
-      <Sanik />
+      <MemesFolder
+        memeIds={[rosiePostId, myPostId, tgmPostId]}
+        counter={counter}
+      />
+      <Styled.Spacer height="69px" />
     </div>
   );
 }
