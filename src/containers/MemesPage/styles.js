@@ -48,6 +48,20 @@ export const FolderCover = styled.div`
   // z-index: ${getZ};
   display: flex;
   flex: 1;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+`;
+
+export const FolderCoverSpacer = styled.div`
+  width: 100px;
+  max-width: 100px;
+  min-width: 100px;
+  background-color: transparent;
+  height: 420px;
+  // z-index: ${getZ};
+  display: flex;
+  flex: 1;
   position: relative;
 `;
 

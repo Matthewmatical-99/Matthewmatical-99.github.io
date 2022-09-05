@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import * as R from 'ramda';
 
 import useCounter from '../../hooks/useCounter';
-// import useDrag from './useDrag';
+import useDrag from './useDrag';
 import InstaPost from './InstaPost';
 import DraggyBoi from './DraggyBoi';
 
@@ -18,11 +18,24 @@ const MemesFolder = ({ memeIds, counter }) => {
   const updateFolderHeight = R.pipe(R.max, setFolderHeight, loadedMemesCounter.increment);
   const allMemesLoaded = (loadedMemesCounter.count >= memeIds.length);
 
+  const folderDragHook = useDrag(counter);
+
   return (
-    <Styled.FolderContainer style={{ opacity: 0 + allMemesLoaded }}>
-      <Styled.FolderCover onClick={resetMemes} style={{ height: folderHeight + 40 }} />
-      <Styled.FolderMain style={{ height: folderHeight }} />
-      <Styled.MemesContainer>
+    <Styled.FolderContainer
+      style={{
+        ...folderDragHook.offsets,
+        opacity: 0 + allMemesLoaded
+      }}
+    >
+      <Styled.FolderCoverSpacer />
+      <Styled.FolderMain
+        style={{
+          height: folderHeight,
+          zIndex: folderDragHook.z,
+        }}
+        draggable
+        {...folderDragHook.dragHandlers}
+      >
         {memeIds.map(memeId => (
           <DraggyBoi
             subscribeToResets={appendMeme}
@@ -33,7 +46,17 @@ const MemesFolder = ({ memeIds, counter }) => {
             <InstaPost postId={memeId} />
           </DraggyBoi>
         ))}
-      </Styled.MemesContainer>
+
+      </Styled.FolderMain>
+      <Styled.FolderCover
+        onClick={resetMemes}
+        draggable
+        {...folderDragHook.dragHandlers}
+        style={{
+          height: folderHeight + 40,
+          zIndex: folderDragHook.z,
+        }}
+      />
     </Styled.FolderContainer>
   );
 };

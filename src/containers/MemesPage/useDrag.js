@@ -1,22 +1,34 @@
 import { useState, useRef } from 'react';
 
-const useDrag = (counter) => {
+import useBooleanState from '../../hooks/useBooleanState';
+
+const NO_OFFSET = { left: 0, top: 0 };
+
+const useDrag = (counter, parentOffsets = NO_OFFSET) => {
+  const attachedToParent = useBooleanState(true);
   const startPosRef = useRef(null);
-  const offsetsRef = useRef({ left: 0, top: 0 });
+  const [detachmentOffsets, setDetachmentOffsets] = useState(NO_OFFSET);
+  const offsetsRef = useRef(NO_OFFSET);
 
   const [z, setZ] = useState(0);
 
   // Where this component has been dragged, relative to initial position
-  const [offsets, setOffsets] = useState({ left: 0, top: 0 });
+  const [offsets, setOffsets] = useState(NO_OFFSET);
 
   const pickUp = event => {
+    event.stopPropagation();
     startPosRef.current = { startX: event.clientX, startY: event.clientY };
     if (!!counter) {
       setZ(counter.increment());
     }
+    if (attachedToParent.state){
+      attachedToParent.setFalse();
+      setDetachmentOffsets(parentOffsets);
+    }
   };
 
   const putDown = event => {
+    event.stopPropagation();
     const left = event.clientX - startPosRef.current.startX + offsetsRef.current.left;
     const top = event.clientY - startPosRef.current.startY + offsetsRef.current.top;
     offsetsRef.current = { left, top };
@@ -24,6 +36,7 @@ const useDrag = (counter) => {
   };
 
   const drag = event => {
+    event.stopPropagation();
     putDown(event);
     startPosRef.current = { startX: event.clientX, startY: event.clientY };
   }
@@ -32,14 +45,26 @@ const useDrag = (counter) => {
     offsetsRef.current = newPos;
     setOffsets(newPos);
   };
+
+  const reset = () => {
+    jumpTo(NO_OFFSET);
+    attachedToParent.setTrue();
+    setDetachmentOffsets(NO_OFFSET);
+  };
   
   return {
-    offsets,
+    offsets: attachedToParent.state ? offsets : {
+      left: offsets.left - parentOffsets.left + detachmentOffsets.left,
+      top: offsets.top - parentOffsets.top + detachmentOffsets.top,
+    },
     z,
-    pickUp,
-    putDown,
-    drag,
     jumpTo,
+    dragHandlers: {
+      onDragStart: pickUp,
+      onDrag: drag,
+      onDragEnd: putDown,
+    },
+    reset,
   };
 };
 

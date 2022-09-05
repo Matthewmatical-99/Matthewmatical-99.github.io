@@ -6,8 +6,15 @@ import useFinalHeight from './useFinalHeight';
 
 import * as Styled from './styles';
 
-const DraggyBoi = ({ children, subscribeToResets, updateFolderHeight, absolute, counter }) => {
-  const dragHook = useDrag(counter);
+const DraggyBoi = ({
+    children,
+    subscribeToResets,
+    updateFolderHeight,
+    absolute,
+    counter,
+    folderOffsets
+  }) => {
+  const dragHook = useDrag(counter, folderOffsets);
 
   // When the content within has loaded, notify parent so it can resize itself.
   const { nodeRef } = useFinalHeight(updateFolderHeight);
@@ -16,8 +23,8 @@ const DraggyBoi = ({ children, subscribeToResets, updateFolderHeight, absolute, 
   // so we place an invisible div over it so the entire area remains draggable.
   const doCover = useBooleanState(true);
 
-  // User might want to access inner iframe.
-  // This allows that, although it requires an extra click.
+  // User might still want to access inner iframe(e.g. to navigate thru multi-image posts).
+  // This allows that, although it requires an extra click from the user.
   const tempRemoveCover = () => {
     doCover.setFalse();
     setTimeout(() => {
@@ -28,7 +35,7 @@ const DraggyBoi = ({ children, subscribeToResets, updateFolderHeight, absolute, 
   // Pass a position-reset fn to parent "folder"
   useEffect(() => {
     if (!!subscribeToResets) {
-      subscribeToResets(() => { dragHook.jumpTo({ top: 0, left: 0 }); });
+      subscribeToResets(dragHook.reset);
     }
   }, []); //eslint-disable-line react-hooks/exhaustive-deps
 
@@ -43,9 +50,7 @@ const DraggyBoi = ({ children, subscribeToResets, updateFolderHeight, absolute, 
       {children}
       <Styled.DragCover
         draggable
-        onDragStart={dragHook.pickUp}
-        onDragEnd={dragHook.putDown}
-        onDrag={dragHook.drag}
+        {...dragHook.dragHandlers}
         onClick={tempRemoveCover}
         style={{ display: doCover.value ? 'block' : 'none' }}
       />
