@@ -17,7 +17,7 @@ const AboutMePage = () => (
       <Styled.ImageWrapper>
         <FloatIn delay="1000ms">
           {/* Selfie, pink hair, with mask */}
-          <Styled.AMPImage src="https://lh3.googleusercontent.com/pw/AM-JKLXi4BcfhP03jeAVEPfKyp4dx8Gmu_fi_NEl0Xo88BtY2YehVPE5T4QXa1WKRx6MfnsBOUdbNpPOlfaShafreVY4XYUeUTNt0WSSM8aYXS_CHgC5OnfuC9BqEAyQIANSeIdF_4QlhhT1kFf5s-avIj6zdg=w727-h969-no?authuser=0" />
+          <Styled.AMPImage src="https://i.imgur.com/rfSAZnb.jpg" />
         </FloatIn>
       </Styled.ImageWrapper>
       <Styled.ImageWrapper>
