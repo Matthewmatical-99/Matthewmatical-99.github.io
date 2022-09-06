@@ -37,6 +37,7 @@ export const FolderMain = styled.div`
   width: 100%;
   max-width: 366px;
   // z-index: ${getZ};
+  border: 1px solid green;
 `;
 
 export const FolderCover = styled.div`
@@ -51,6 +52,7 @@ export const FolderCover = styled.div`
   position: absolute;
   left: 0px;
   top: 0px;
+  border: 1px solid green;
 `;
 
 export const FolderCoverSpacer = styled.div`
