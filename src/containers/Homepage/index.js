@@ -9,7 +9,7 @@ function Homepage() {
   return (
     <div>
       <div className="content-body">
-        <p>This is the official website of Zoey/Matthew Phillips. Thank you for visiting.</p>
+        <p>This is the official website of Zoey Phillips. Thank you for visiting.</p>
         <p>I made this website to show off my l33t c0d1ng ski11z.</p>
         <p>Check out the games; there's actually some content there lol</p>
         <p>More content (and maybe even some professionalism) coming soon. Please check again tomorrow.</p>
