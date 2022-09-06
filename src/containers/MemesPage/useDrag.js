@@ -3,8 +3,15 @@ import { useState, useRef } from 'react';
 import useBooleanState from '../../hooks/useBooleanState';
 
 const NO_OFFSET = { left: 0, top: 0 };
+const NOOP = () => {};
 
-const useDrag = (counter, parentOffsets = NO_OFFSET, setAttachment = () => {}) => {
+const useDrag = (
+  counter,
+  parentOffsets = NO_OFFSET,
+  setAttachment = NOOP,
+  attach = NOOP,
+  detach = NOOP,
+) => {
   const attachedToParent = useBooleanState(true);
   const startPosRef = useRef(null);
   const [detachmentOffsets, setDetachmentOffsets] = useState(NO_OFFSET);
@@ -21,10 +28,11 @@ const useDrag = (counter, parentOffsets = NO_OFFSET, setAttachment = () => {}) =
     if (!!counter) {
       setZ(counter.increment());
     }
-    if (attachedToParent.state){
+    if (attachedToParent.state && setAttachment !== NOOP){
       attachedToParent.setFalse();
       setDetachmentOffsets(parentOffsets);
       setAttachment(false);
+      detach();
     }
   };
 
@@ -52,11 +60,12 @@ const useDrag = (counter, parentOffsets = NO_OFFSET, setAttachment = () => {}) =
     attachedToParent.setTrue();
     setDetachmentOffsets(NO_OFFSET);
     setAttachment(true);
+    attach();
   };
   
   return {
     offsets: attachedToParent.state ? offsets : {
-      left: offsets.left - parentOffsets.left + detachmentOffsets.left,
+      left: offsets.left - parentOffsets.left + detachmentOffsets.left + 100,
       top: offsets.top - parentOffsets.top + detachmentOffsets.top,
     },
     z,

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, memo } from 'react';
 import * as R from 'ramda';
 
 import { fixedScript } from './utils';
@@ -40,4 +40,5 @@ const InstaPost = ({ postId, captioned }) => {
     </React.Fragment>
   );
 };
-export default InstaPost;
+
+export default memo(InstaPost);

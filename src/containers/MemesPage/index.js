@@ -31,6 +31,10 @@ function MemesPage() {
         memeIds={[rosiePostId, myPostId, tgmPostId]}
         counter={counter}
       />
+      <MemesFolder
+        memeIds={[myPostId, tgmPostId, rosiePostId]}
+        counter={counter}
+      />
       <Styled.Spacer height="69px" />
     </div>
   );

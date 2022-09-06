@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
+import { createReparentableSpace } from 'react-reparenting';
 import * as R from 'ramda';
 
 import useCounter from '../../hooks/useCounter';
@@ -8,6 +9,8 @@ import DraggyBoi from './DraggyBoi';
 
 import * as Styled from './styles';
 import useListState from '../../hooks/useListState';
+
+const { Reparentable, sendReparentableChild } = createReparentableSpace();
 
 const MemesFolder = ({ memeIds, counter }) => {
   const [memeResetters, setMemeResetters] = useState([]);
@@ -22,6 +25,11 @@ const MemesFolder = ({ memeIds, counter }) => {
   const folderDragHook = useDrag(counter);
 
   const memesAttachmentStatus = useListState(R.repeat(true, memeIds.length));
+
+  const [folderParentId, outsideParentId] = useMemo(() => {
+    const memeIdsString = memeIds.join();
+    return [`${memeIdsString}_inside`, `${memeIdsString}_outside`];
+  }, [memeIds]);
 
   return (
     <Styled.FolderContainer
@@ -39,20 +47,29 @@ const MemesFolder = ({ memeIds, counter }) => {
         draggable
         {...folderDragHook.dragHandlers}
       >
-        {memeIds.map((memeId, index) => (
-          memesAttachmentStatus.value[index] ? (
-            <DraggyBoi
-              subscribeToResets={appendMeme}
-              updateFolderHeight={updateFolderHeight}
-              counter={counter}
-              absolute
-              setAttachment={memesAttachmentStatus.updateOne(index)}
-              folderOffsets={folderDragHook.offsets}
-            >
-              <InstaPost postId={memeId} />
-            </DraggyBoi>
-          ) : null
-        ))}
+        <Reparentable id={folderParentId}>
+          {memeIds.map((memeId, index) => (
+            memesAttachmentStatus.value[index] ? (
+              <DraggyBoi
+                subscribeToResets={appendMeme}
+                updateFolderHeight={updateFolderHeight}
+                counter={counter}
+                absolute
+                setAttachmentState={memesAttachmentStatus.updateOne(index)}
+                detach={() => {
+                  sendReparentableChild(folderParentId, outsideParentId, memeId, -1);
+                }}
+                attach={() => {
+                  sendReparentableChild(outsideParentId, folderParentId, memeId, -1);
+                }}
+                folderOffsets={folderDragHook.offsets}
+                key={memeId}
+              >
+                <InstaPost postId={memeId} />
+              </DraggyBoi>
+            ) : null
+          ))}
+        </Reparentable>
       </Styled.FolderMain>
       <Styled.FolderCover
         onClick={resetMemes}
@@ -63,20 +80,29 @@ const MemesFolder = ({ memeIds, counter }) => {
           zIndex: folderDragHook.z,
         }}
       />
-      {memeIds.map((memeId, index) => (
-        memesAttachmentStatus.value[index] ? null : (
-          <DraggyBoi
-            subscribeToResets={appendMeme}
-            updateFolderHeight={updateFolderHeight}
-            counter={counter}
-            absolute
-            setAttachment={memesAttachmentStatus.updateOne(index)}
-            folderOffsets={folderDragHook.offsets}
-          >
-            <InstaPost postId={memeId} />
-          </DraggyBoi>
-        )
-      ))}
+      <Reparentable id={outsideParentId}>
+        {memeIds.map((memeId, index) => (
+          memesAttachmentStatus.value[index] ? null : (
+            <DraggyBoi
+              subscribeToResets={appendMeme}
+              updateFolderHeight={updateFolderHeight}
+              counter={counter}
+              absolute
+              setAttachment={memesAttachmentStatus.updateOne(index)}
+              folderOffsets={folderDragHook.offsets}
+              key={memeId}
+              detach={() => {
+                sendReparentableChild(folderParentId, outsideParentId, memeId, -1);
+              }}
+              attach={() => {
+                sendReparentableChild(outsideParentId, folderParentId, memeId, -1);
+              }}
+            >
+              <InstaPost postId={memeId} />
+            </DraggyBoi>
+          )
+        ))}
+      </Reparentable>
     </Styled.FolderContainer>
   );
 };
