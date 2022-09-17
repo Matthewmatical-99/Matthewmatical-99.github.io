@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 import useBooleanState from '../../hooks/useBooleanState';
 
@@ -11,13 +11,20 @@ const useDrag = (
   setAttachment = NOOP,
   attach = NOOP,
   detach = NOOP,
+  parentZ = 0,
 ) => {
   const attachedToParent = useBooleanState(true);
   const startPosRef = useRef(null);
   const [detachmentOffsets, setDetachmentOffsets] = useState(NO_OFFSET);
   const offsetsRef = useRef(NO_OFFSET);
 
-  const [z, setZ] = useState(0);
+  const [z, setZ] = useState(parentZ + 1);
+
+  useEffect(() => {
+    if (attachedToParent.state) {
+      setZ(parentZ + 1);
+    }
+  }, [parentZ]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Where this component has been dragged, relative to initial position
   const [offsets, setOffsets] = useState(NO_OFFSET);
