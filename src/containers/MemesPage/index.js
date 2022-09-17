@@ -39,7 +39,7 @@ function MemesPage() {
         </Styled.FolderWrapper>
         <Styled.FolderWrapper>
           <MemesFolder
-            memeIds={['CgV9BN4sZ8I', 'CQqI6M4lLG5', 'CBqDGHqlg8c']}
+            memeIds={['CgV9BN4sZ8I', 'CQqI6M4lLG5', 'CBqDGHqlg8c', 'CiHctVvOKB8', 'CiI1RymhJNV']}
             counter={counter}
           />
         </Styled.FolderWrapper>
