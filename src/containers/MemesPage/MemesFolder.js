@@ -1,35 +1,24 @@
-import React, { useMemo, useState } from 'react';
-import { createReparentableSpace } from 'react-reparenting';
+import React, { useState } from 'react';
 import * as R from 'ramda';
 
 import useCounter from '../../hooks/useCounter';
-import useDrag from './useDrag';
+import useDragFolder from './useDragFolder';
 import InstaPost from './InstaPost';
 import DraggyBoi from './DraggyBoi';
 
 import * as Styled from './styles';
-import useListState from '../../hooks/useListState';
-
-const { Reparentable, sendReparentableChild } = createReparentableSpace();
 
 const MemesFolder = ({ memeIds, counter }) => {
-  const [memeResetters, setMemeResetters] = useState([]);
+ const folderDragHook = useDragFolder(counter, -1);
+
+   const [memeResetters, setMemeResetters] = useState([]);
   const appendMeme = R.pipe(R.append, setMemeResetters);
-  const resetMemes = () => { memeResetters.forEach(R.call); };
+  const resetMemes = () => { memeResetters.forEach(reset => { reset(folderDragHook.z); }); };
 
   const loadedMemesCounter = useCounter();
   const [folderHeight, setFolderHeight] = useState(420);
   const updateFolderHeight = R.pipe(R.max, setFolderHeight, loadedMemesCounter.increment);
   const allMemesLoaded = (loadedMemesCounter.count >= memeIds.length);
-
-  const folderDragHook = useDrag(counter);
-
-  const memesAttachmentStatus = useListState(R.repeat(true, memeIds.length));
-
-  const [folderParentId, outsideParentId] = useMemo(() => {
-    const memeIdsString = memeIds.join();
-    return [`${memeIdsString}_inside`, `${memeIdsString}_outside`];
-  }, [memeIds]);
 
   return (
     <Styled.FolderContainer
@@ -46,63 +35,29 @@ const MemesFolder = ({ memeIds, counter }) => {
         }}
         draggable
         {...folderDragHook.dragHandlers}
-      >
-        <Reparentable id={folderParentId}>
-          {memeIds.map((memeId, index) => (
-            memesAttachmentStatus.value[index] ? (
-              <DraggyBoi
-                subscribeToResets={appendMeme}
-                updateFolderHeight={updateFolderHeight}
-                counter={counter}
-                absolute
-                setAttachmentState={memesAttachmentStatus.updateOne(index)}
-                detach={() => {
-                  sendReparentableChild(folderParentId, outsideParentId, memeId, -1);
-                }}
-                attach={() => {
-                  sendReparentableChild(outsideParentId, folderParentId, memeId, -1);
-                }}
-                folderOffsets={folderDragHook.offsets}
-                key={memeId}
-              >
-                <InstaPost postId={memeId} />
-              </DraggyBoi>
-            ) : null
-          ))}
-        </Reparentable>
-      </Styled.FolderMain>
+      />
+      {memeIds.map(memeId => (
+        <DraggyBoi
+          subscribeToResets={appendMeme}
+          updateFolderHeight={updateFolderHeight}
+          counter={counter}
+          absolute
+          folderOffsets={folderDragHook.offsets}
+          key={memeId}
+          parentZ={folderDragHook.z}
+        >
+          <InstaPost postId={memeId} />
+        </DraggyBoi>
+      ))}
       <Styled.FolderCover
         onClick={resetMemes}
         draggable
         {...folderDragHook.dragHandlers}
         style={{
           height: folderHeight + 40,
-          zIndex: folderDragHook.z,
+          zIndex: folderDragHook.z + 2,
         }}
       />
-      <Reparentable id={outsideParentId}>
-        {memeIds.map((memeId, index) => (
-          memesAttachmentStatus.value[index] ? null : (
-            <DraggyBoi
-              subscribeToResets={appendMeme}
-              updateFolderHeight={updateFolderHeight}
-              counter={counter}
-              absolute
-              setAttachment={memesAttachmentStatus.updateOne(index)}
-              folderOffsets={folderDragHook.offsets}
-              key={memeId}
-              detach={() => {
-                sendReparentableChild(folderParentId, outsideParentId, memeId, -1);
-              }}
-              attach={() => {
-                sendReparentableChild(outsideParentId, folderParentId, memeId, -1);
-              }}
-            >
-              <InstaPost postId={memeId} />
-            </DraggyBoi>
-          )
-        ))}
-      </Reparentable>
     </Styled.FolderContainer>
   );
 };
