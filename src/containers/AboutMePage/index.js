@@ -7,7 +7,6 @@ import * as Styled from './styles';
 
 const AboutMePage = () => (
   <React.Fragment>
-    <p style={{ color: 'white' }}>More content coming soon!</p>
     <Styled.ContentList>
       <Styled.ImageWrapper>
         <FloatIn delay="500ms">
@@ -16,8 +15,8 @@ const AboutMePage = () => (
       </Styled.ImageWrapper>
       <Styled.ImageWrapper>
         <FloatIn delay="1000ms">
-          {/* Selfie, pink hair, with mask */}
-          <Styled.AMPImage src="https://i.imgur.com/rfSAZnb.jpg" />
+          {/* Selfie, pink+blue hair, suit jacket */}
+          <Styled.AMPImage src="https://i.imgur.com/qPmFV1Q.jpg" />
         </FloatIn>
       </Styled.ImageWrapper>
       <Styled.ImageWrapper>
@@ -28,6 +27,12 @@ const AboutMePage = () => (
       <Styled.ImageWrapper>
         <FloatIn delay="750ms">
           <Degree />
+        </FloatIn>
+      </Styled.ImageWrapper>
+      <Styled.ImageWrapper>
+        <FloatIn delay="1250ms">
+          {/* Selfie, light pink hair, with mask */}
+          <Styled.AMPImage src="https://i.imgur.com/rfSAZnb.jpg" />
         </FloatIn>
       </Styled.ImageWrapper>
     </Styled.ContentList>
