@@ -9,7 +9,6 @@ import * as Styled from './styles';
 
 const rosiePostId = "CgXyZoaujMV";
 const myPostId = "CgZSrvxOaC0";
-const tgmPostId = 'CiG2aaoMYwx';
 
 function MemesPage() {
   const counter = useCounter();
@@ -33,13 +32,13 @@ function MemesPage() {
       <Flex flex={1} flexDirection="row" flexWrap="wrap">
         <Styled.FolderWrapper>
           <MemesFolder
-            memeIds={[rosiePostId, myPostId, tgmPostId]}
+            memeIds={[rosiePostId, myPostId]}
             counter={counter}
           />
         </Styled.FolderWrapper>
         <Styled.FolderWrapper>
           <MemesFolder
-            memeIds={['CgV9BN4sZ8I', 'CQqI6M4lLG5', 'CBqDGHqlg8c', 'CiHctVvOKB8']}
+            memeIds={['CgV9BN4sZ8I', 'CQqI6M4lLG5', 'CBqDGHqlg8c']}
             counter={counter}
           />
         </Styled.FolderWrapper>
